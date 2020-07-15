@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="gfx/favicon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Taki mamy KLIMAT!</title>
+</head>
+<body>
+  <nav>
+    <div class="nav-wrapper white">
+      <div class="container">
+        <a href="#!" class="brand-logo left teal-text text-darken-4"><img src="gfx/logo-green.png" alt="Eltwin"></a>
+        <a href="#" data-target="mobile-nav" class="sidenav-trigger right teal-text text-darken-4"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <ul class="sidenav teal-text text-darken-4" id="mobile-nav">
+  </ul>
+
+  <div class="container">
+    <h5 class="sensorsqty"><span>0</span> active sensors:</h5>
+    <hr>
+    <div class="sensorlist">
+      <div class="sensor">
+        <div class="card hoverable">
+          <div class="card-content">
+            <div class="card-title">Sensor #1 <span class="right"><a href="#" class="more"><i class="material-icons small">notifications</i></a><a href="#" class="more"><i class="material-icons small">battery_full</i></a></span></div>
+
+            <hr>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+
+$(document).ready(function () {
+  $('.sidenav').sidenav({edge: 'right'});
+});
+
+</script>
+</body>
+</html>

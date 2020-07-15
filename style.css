@@ -1,0 +1,31 @@
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+    color: #004d40 !important;
+}
+
+hr{
+    border: 1px solid #004d40;
+}
+
+.sensorsqty{
+    margin-top: 30px;
+}
+
+.sensor{
+    width: 400px;
+
+}
+
+.sensorlist{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.more{
+    color: #004d40;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    margin-right: 5px;
+}

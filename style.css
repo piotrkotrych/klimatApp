@@ -29,3 +29,16 @@ hr{
     padding: 0;
     margin-right: 5px;
 }
+
+.temp, .hum{
+    margin: 30px 0 0;
+}
+
+.lastupdate{
+    text-align: center;
+    font-size: 12px;
+}
+
+.main{
+    display: none;
+}

@@ -42,3 +42,15 @@ hr{
 .main{
     display: none;
 }
+
+.sensorcard{
+    border-left: 1px solid #004d40;
+}
+
+.card h5 a{
+    color: inherit;
+}
+
+.nav-wrapper a{
+    color: #004d40 !important;
+}

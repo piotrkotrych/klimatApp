@@ -17,7 +17,7 @@
         <a href="#" data-target="mobile-nav" class="sidenav-trigger right teal-text text-darken-4"><i class="material-icons">menu</i></a>
         <ul class="right hide-on-med-and-down teal-text text-darken-4">
           <li><a href="index.html">Sensors</a></li>
-          <li><a href="heatmap.html">Heatmap</a></li>
+          <li class="hide-on-med-and-down"><a href="heatmap.html">Heatmap</a></li>
           <li><a href="index.html">Alerts</a></li>
           <li><a href="index.html">Configuration</a></li>
         </ul>
@@ -27,7 +27,6 @@
 
   <ul class="sidenav teal-text text-darken-4" id="mobile-nav">
     <li><a href="index.html">Sensors</a></li>
-    <li><a href="heatmap.html">Heatmap</a></li>
     <li><a href="index.html">Alerts</a></li>
     <li><a href="index.html">Configuration</a></li>
   </ul>
@@ -52,22 +51,9 @@
 
 $(document).ready(function () {
 
-  var heat = simpleheat('heatmap');
-
-  var data = [[80,100, 5], [250, 30, 4]];
-
-  heat.data(data);
-
-  heat.radius(25,15);
-
-  heat.max(6);
-
-  heat.draw();
-
 
   $('.sidenav').sidenav({edge: 'right'});
 
-  let sensorqty = null;
   let sensors = [];
 
   
@@ -77,34 +63,49 @@ $(document).ready(function () {
     data: {type: 'getSensors'},
     success: function (r) {
       sensors.push(r);
-      sensorqty = r.length;
-      $(".sensorqty").html(sensorqty);
+      let data = [];
+      let text = [];
+
       $(".loading").hide();
       
       r.forEach(el => {
-
-        let bat_icon = 'battery_full';
-        let bat_color = '#004d40';
-
-        if(parseInt(el.bat) <= 10){
-          bat_icon = 'battery_alert';
-          bat_color = 'red';
-        }
-        
-        let alert_icon = 'notifications';
-        let alert_color = '#004d40';
-        let alert_text = 'No new alerts';
-
-        if(parseInt(el.hum) <= 30){
-          alert_icon = 'notifications_active';
-          alert_color = 'red';
-          alert_text = 'Humidity level below 30%';
-        }
-
-        $(".sensorlist").append('<div class="sensor"><div class="card sensorcard"><div class="card-content"><div class="card-title">Sensor #'+el.sensor+' <span class="right"><a href="#" class="more tooltipped" data-position="bottom" data-tooltip="'+alert_text+'"><i class="material-icons small" style="color: '+alert_color+';">'+alert_icon+'</i></a><a href="#" class="more tooltipped" data-position="bottom" data-tooltip="'+el.bat+'% of battery left"><i class="material-icons small" style="color: '+bat_color+';">'+bat_icon+'</i></a></span></div> <hr> <div class="temp"> <h5>Temperature: <span>'+el.temp+'&#8451;</span> <a href="#"><span class="more right"><i class="material-icons small">more_vert</i></span></a></h5> </div> <div class="hum"> <h5><a href="#">Humidity:</a> <span>'+el.hum+'%</span><a href="#"><span class="more right"><i class="material-icons small">more_vert</i></span></a></h5> </div> <div class="hum"> <h5>Location: <span>'+el.loc+'</span></h5> </div> </div> <div class="lastupdate"> Last update: <span>'+el.data+'</span> </div> </div> </div>');
+        let temp = [el.locx, el.locy, el.temp];
+        let info = [el.sensor, el.locx, el.locy, el.temp]
+        data.push(temp);
+        text.push(info);
       });
-      $('.tooltipped').tooltip();
+
+      console.log(text);
+
+      var canvas = document.getElementById("heatmap");
+      canvas.width = 823;
+      canvas.height = 681;
+
+      var heat = simpleheat('heatmap');
+
+      heat.data(data);
+
+      heat.radius(70,40);
+
+      heat.max(30);
+      heat.draw(0.02);
+      var ctx = canvas.getContext("2d");
+
+      ctx.font = "20px Verdana";
+      ctx.textAlign = "center";
+      ctx.color = "#004d40";
+
+      text.forEach(sen => {
+        ctx.fillText("Sensor #"+sen[0], sen[1], sen[2]);
+        let textloc = parseInt(sen[2])+20;
+        ctx.fillText(sen[3]+"℃", sen[1], textloc);
+      });
+
+
+      
+      
       $(".main").show(100);
+
     }
   });
 

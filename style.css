@@ -56,8 +56,6 @@ hr{
 }
 
 #heatmap{
-    width: 823px;
-    height: 681px;
     background-image: url('gfx/hala.PNG');
     background-size: contain;
     background-repeat: no-repeat;

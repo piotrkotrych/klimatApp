@@ -17,13 +17,15 @@ switch ($_GET['type']) {
 
             $sensor = $r['sensor'];
 
-            $sql1 = mysqli_query($link, "SELECT created, napiecie_baterii as bat, (SELECT procent FROM `klimat_bat` WHERE napiecie_baterii between vFrom and vTo) as procent, round(avg(temperatura),1) as temp, round(AVG(wilgotnosc),1) as hum, lokacja FROM `klimat` left join klimat_sensor on klimat.miejsce = klimat_sensor.miejsce WHERE klimat.miejsce = '$sensor' GROUP by created, bat, lokacja order by created desc limit 1");
+            $sql1 = mysqli_query($link, "SELECT created, napiecie_baterii as bat, (SELECT procent FROM `klimat_bat` WHERE napiecie_baterii between vFrom and vTo) as procent, round(avg(temperatura),1) as temp, round(AVG(wilgotnosc),1) as hum, lokacja, lokx, loky FROM `klimat` left join klimat_sensor on klimat.miejsce = klimat_sensor.miejsce WHERE klimat.miejsce = '$sensor' GROUP by created, bat, lokacja, lokx, loky order by created desc limit 1");
             if($res = mysqli_fetch_assoc($sql1)){
                 $r['data'] = $res['created'];
                 $r['temp'] = $res['temp'];
                 $r['hum'] = $res['hum'];
                 $r['bat'] = $res['procent'];
                 $r['loc'] = $res['lokacja'];
+                $r['locx'] = $res['lokx'];
+                $r['locy'] = $res['loky'];
             }
 
             array_push($sensors, $r);

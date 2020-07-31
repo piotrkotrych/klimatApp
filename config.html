@@ -34,6 +34,53 @@
   <div class="container main">
     <h5 class="sensorsqty">Sensor configuration:</h5>
     <hr>
+    <h5>Choose sensor:</h5>
+    <div class="input-field">
+      <select name="sensor" id="chooseSensor">
+        <option value=""></option>
+      </select>
+    </div>
+    <form action="#" class="formconfig" style="display: none;">
+      <div class="row">
+        <h5 class="col m6 offset-m3">Sensor #<span class="sensorNumber"></span> configuration:</h5>
+      </div>
+      <div class="row">
+        <div class="input-field col m6 offset-m3">
+          <input type="text" value="" class="loc" name="loc">
+          <label for="" class="active">Location name:</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col m2 offset-m3">
+          <input type="text" value="" class="locx" id="locx" name="locx">
+          <label for="locx">Location X:</label>
+        </div>
+        <div class="input-field col m2">
+          <input type="text" value="" class="locy" id="locy" name="locy">
+          <label for="locy" class="active">Location Y:</label>
+        </div>
+        <div class="input-field col m2">
+          <a class="btn waves-effect waves-light modal-trigger hide-on-med-and-down" href="#modalmap">Choose <i class="material-icons right">add_location</i></a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col m3 offset-m3">
+          <button class="btn waves-effect waves-light" type="submit">Update sensor</button>
+        </div>
+      </div>
+        
+      
+    </form>
+  </div>
+
+  <div id="modalmap" class="modal" style="min-height: 823px; min-width: 900px;">
+    <div class="modal-content">
+      <h4>Production map:</h4>
+      <div class="heatmap-main center-align">
+        <canvas id="heatmap" class="modal-close"></canvas>
+      </div>
+      <span class="locxy"></span>
+    </div>
   </div>
 
   <div class="container loading">
@@ -46,7 +93,12 @@
 <script>
 
 $(document).ready(function () {
+  
+  $('#modalmap').modal();
 
+  let canvas = document.getElementById("heatmap");
+  canvas.width = 823;
+  canvas.height = 681;
 
   $('.sidenav').sidenav({edge: 'right'});
 
@@ -59,14 +111,91 @@ $(document).ready(function () {
     data: {type: 'getSensors'},
     success: function (r) {
       sensors.push(r);
+      
+      r.forEach(el => {        
+        $("#chooseSensor").append("<option value='"+el.sensor+"'>Sensor #"+el.sensor+" - lokacja: "+el.loc+"</option>");
+      });
+
+      $('select').formSelect();
+
+      let ctx = canvas.getContext("2d");
+
+      ctx.font = "20px Verdana";
+      ctx.textAlign = "center";
+      ctx.color = "#004d40";
+
+      r.forEach(el => {
+        ctx.fillText("Sensor #"+el.sensor, el.locx, el.locy);
+        let textloc = parseInt(el.locy)+20;
+        ctx.fillText(el.temp+"℃", el.locx, textloc);
+      });
+
+      canvas.addEventListener("mousemove", function (evt) {
+          let mousePos = getMousePos(canvas, evt);
+          $(".locxy").html('Location X: ' + Math.round(mousePos.x) + ', Location Y: ' + Math.round(mousePos.y));
+      }, false);
+      canvas.addEventListener("click", function (evt) {
+          let mousePos = getMousePos(canvas, evt);
+          $("#locx").val(Math.round(mousePos.x));
+          $("#locy").val(Math.round(mousePos.y));
+      }, false);
+
+      function getMousePos(canvas, evt) {
+          let rect = canvas.getBoundingClientRect();
+          return {
+              x: evt.clientX - rect.left,
+              y: evt.clientY - rect.top
+          };
+      }
+      
+      
       $(".loading").hide();
 
-      
       
       $(".main").show(100);
 
     }
   });
+
+  
+
+
+  function getOne(id){
+    let sensor = [];
+
+    for (let i = 0; i < sensors[0].length; i++) {
+      if(parseInt(sensors[0][i].sensor) === parseInt(id)){
+        sensor.push(sensors[0][i]);
+        return sensor[0];
+      }
+      
+    }
+  }
+  
+
+  $("#chooseSensor").on("change", (e) => {
+    let sensorid = e.target.value;
+    
+    if(sensorid){
+      
+      let sen = getOne(sensorid);
+
+      $(".loc").val(sen.loc);
+      $(".locx").val(sen.locx);
+      $(".locy").val(sen.locy);
+      $(".sensorNumber").html(sen.sensor);
+      $("label").addClass("active");
+
+      
+
+      $(".formconfig").show(100);
+
+    }else{
+      $(".formconfig").hide(0);
+    }
+    
+  });
+  
 
   
   

@@ -34,6 +34,19 @@ switch ($_GET['type']) {
         
         echo json_encode($sensors);
         break;
+
+    case 'updateSensor':
+
+        $id = $_POST['id'];
+        $loc = $_POST['loc'];
+        $locx = $_POST['locx'];
+        $locy = $_POST['locy'];
+
+        if(mysqli_query($link, "update klimat_sensor set lokacja = '$loc', lokx = '$locx', loky = '$locy' where miejsce = '$id'")){
+            echo "updejt sucesful";
+        }
+
+        break;
     
     default:
         # code...

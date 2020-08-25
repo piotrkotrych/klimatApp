@@ -10,26 +10,7 @@
   <title>Taki mamy KLIMAT!</title>
 </head>
 <body>
-  <nav>
-    <div class="nav-wrapper white">
-      <div class="container">
-        <a href="index.html" class="brand-logo left teal-text text-darken-4"><img src="gfx/logo-green.png" alt="Eltwin"></a>
-        <a href="#" data-target="mobile-nav" class="sidenav-trigger right teal-text text-darken-4"><i class="material-icons">menu</i></a>
-        <ul class="right hide-on-med-and-down teal-text text-darken-4">
-          <li><a href="index.html">Sensors</a></li>
-          <li class="hide-on-med-and-down"><a href="heatmap.html">Heatmap</a></li>
-          <li><a href="alerts.html">Alerts</a></li>
-          <li><a href="config.html">Configuration</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <ul class="sidenav teal-text text-darken-4" id="mobile-nav">
-    <li><a href="index.html">Sensors</a></li>
-    <li><a href="alerts.html">Alerts</a></li>
-    <li><a href="config.html">Configuration</a></li>
-  </ul>
+  <div class="menu"></div>
 
   <div class="container main">
     <h5 class="sensorsqty"><span class="sensorqty">0</span> active sensors:</h5>
@@ -47,6 +28,7 @@
   </div>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="js/app.js"></script>
 <script>
 
 $(document).ready(function () {

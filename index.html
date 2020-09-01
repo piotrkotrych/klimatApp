@@ -62,7 +62,7 @@ $(document).ready(function () {
         let alert_color = '#004d40';
         let alert_text = 'No new alerts';
 
-        if(parseInt(el.hum) <= 30){
+        if(parseInt(el.hum) < 30){
           alert_icon = 'notifications_active';
           alert_color = 'red';
           alert_text = 'Humidity level below 30%';

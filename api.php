@@ -47,6 +47,16 @@ switch ($_GET['type']) {
         }
 
         break;
+
+    case 'getAlerts':
+
+        $sql = mysqli_query($link, "select * from klimat where alert = '1'");
+
+        if($r = mysqli_fetch_all($sql, MYSQLI_ASSOC)){
+            echo json_encode($r);
+        }
+
+        break;
     
     default:
         # code...

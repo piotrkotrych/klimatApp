@@ -1,6 +1,6 @@
 <?php
 
-$link = mysqli_connect('10.47.8.236', 'AOITHT', 'eltwin123', 'elt');
+$link = mysqli_connect('localhost', 'so718_klimat', 'eltwin123', 'so718_klimat');
 if (mysqli_connect_errno()) {
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
     exit();
@@ -62,6 +62,23 @@ switch ($_GET['type']) {
         
             
         break;
+
+
+    case 'getDatesRange':
+
+        $id = $_GET['id'];
+
+        $sql = mysqli_query($link, "select min(created) as startDate, max(created) as endDate from klimat where miejsce = '$id'");
+
+        $dates = array();
+
+        while($r = mysqli_fetch_assoc($sql)){
+            array_push($dates, $r);
+        }
+
+        echo json_encode($dates[0]);
+
+    break;
     
     default:
         # code...

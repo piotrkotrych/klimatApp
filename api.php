@@ -50,12 +50,17 @@ switch ($_GET['type']) {
 
     case 'getAlerts':
 
-        $sql = mysqli_query($link, "select * from klimat where alert = '1'");
+        $sql = mysqli_query($link, "select * from klimat where alert = '1' order by created desc limit 50");
 
-        if($r = mysqli_fetch_all($sql, MYSQLI_ASSOC)){
-            echo json_encode($r);
+        $alerts = array();
+        
+        while($r = mysqli_fetch_assoc($sql)){
+            array_push($alerts, $r);
         }
 
+        echo json_encode($alerts);
+        
+            
         break;
     
     default:

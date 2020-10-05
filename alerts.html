@@ -15,6 +15,19 @@
   <div class="container main">
     <h5 class="sensorsqty">Alerts:</h5>
     <hr>
+    <table class="centered striped">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Sensor</th>
+          <th>Temperature</th>
+          <th>Humidity</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
   </div>
 
   <div class="container loading">
@@ -38,14 +51,17 @@ $(document).ready(function () {
   $.ajax({
     type: "get",
     url: "api.php",
-    data: {type: 'getSensors'},
+    data: {type: 'getAlerts'},
     success: function (r) {
       sensors.push(r);
       $(".loading").hide();
+      
+      r.forEach(el => {
+        $("tbody").append("<tr><td>"+el.created+"</td><td>"+el.miejsce+"</td><td>"+el.temperatura+"&#8451;</td><td>"+el.wilgotnosc+"%</td></tr>");
+      });
 
-      
-      
       $(".main").show(100);
+
 
     }
   });

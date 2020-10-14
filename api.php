@@ -50,7 +50,7 @@ switch ($_GET['type']) {
 
     case 'getAlerts':
 
-        $sql = mysqli_query($link, "select * from klimat where alert = '1' order by created desc limit 50");
+        $sql = mysqli_query($link, "select klimat.created, klimat.temperatura, klimat.wilgotnosc, concat(klimat.miejsce, ' - ', klimat_sensor.lokacja) as sensor from klimat left join klimat_sensor on klimat.miejsce = klimat_sensor.miejsce where alert = '1' order by created desc limit 50");
 
         $alerts = array();
         
@@ -68,7 +68,7 @@ switch ($_GET['type']) {
 
         $id = $_GET['id'];
 
-        $sql = mysqli_query($link, "select min(created) as startDate, max(created) as endDate from klimat where miejsce = '$id'");
+        $sql = mysqli_query($link, "select min(date(created)) as startDate, max(date(created)) as endDate from klimat where miejsce = '$id'");
 
         $dates = array();
 
@@ -77,6 +77,41 @@ switch ($_GET['type']) {
         }
 
         echo json_encode($dates[0]);
+
+    break;
+
+    case 'getDataOneDay':
+
+        $id = $_GET['id'];
+        $date = $_GET['date'];
+
+        $sql = mysqli_query($link, "select time(created) as data, temperatura as temp, wilgotnosc as hum from klimat where miejsce = '$id' and date(created) = '$date' order by created asc");
+
+        $data = array();
+
+        while($r = mysqli_fetch_assoc($sql)){
+            array_push($data, $r);
+        }
+
+        echo json_encode($data);
+
+    break;
+
+    case 'getDataRange':
+
+        $id = $_GET['id'];
+        $start = $_GET['start'];
+        $end = $_GET['end'];
+
+        $sql = mysqli_query($link, "select date(created) as data, round(avg(temperatura),2) as temp, round(avg(wilgotnosc),2) as hum from klimat where miejsce = '$id' and date(created) between '$start' and '$end' group by data order by data asc");
+
+        $data = array();
+
+        while($r = mysqli_fetch_assoc($sql)){
+            array_push($data, $r);
+        }
+
+        echo json_encode($data);
 
     break;
     

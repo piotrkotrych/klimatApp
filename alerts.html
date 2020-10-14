@@ -13,7 +13,7 @@
   <div class="menu"></div>
 
   <div class="container main">
-    <h5 class="sensorsqty">Alerts:</h5>
+    <h5 class="sensorsqty">Humidity below 30%:</h5>
     <hr>
     <table class="centered striped">
       <thead>
@@ -57,7 +57,7 @@ $(document).ready(function () {
       $(".loading").hide();
       
       r.forEach(el => {
-        $("tbody").append("<tr><td>"+el.created+"</td><td>"+el.miejsce+"</td><td>"+el.temperatura+"&#8451;</td><td>"+el.wilgotnosc+"%</td></tr>");
+        $("tbody").append("<tr><td>"+el.created+"</td><td>"+el.sensor+"</td><td>"+el.temperatura+"&#8451;</td><td>"+el.wilgotnosc+"%</td></tr>");
       });
 
       $(".main").show(100);

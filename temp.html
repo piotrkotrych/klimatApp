@@ -79,7 +79,7 @@
     </div>
     <div class="row">
       <div class="col s12">
-        <table class="centered striped responsive-table">
+        <table class="centered striped">
           <thead>
             <tr>
               <th>Date or time:</th>
@@ -165,6 +165,7 @@
       e.preventDefault();
       oneDate = $("#oneDate").val();
       getOneDay(sensor, oneDate);
+      document.getElementById('results').scrollIntoView(true);
     });
 
     $("form.range").off().on("submit",e =>{
@@ -172,6 +173,7 @@
       startDate = $("#startDate").val();
       endDate = $("#endDate").val();
       getRange(sensor, startDate, endDate);
+      document.getElementById('results').scrollIntoView(true);
     });
 
     function getOneDay(sensor, onedate){
@@ -206,8 +208,8 @@
       });
       
       $(".loading").hide();
-      $(".results").show(100);
-      $("#results").get(0).scrollIntoView(true);
+      $(".results").show();
+      
     }
 
     function getRange(sensor, start, end){
@@ -247,8 +249,7 @@
       });
       
       $(".loading").hide();
-      $(".results").show(100);
-      $("#results").get(0).scrollIntoView(true);
+      $(".results").show();
     }
 
     

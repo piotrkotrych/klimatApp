@@ -71,7 +71,14 @@
     <hr>
   </div>
   <div class="container results" style="display: none;" id="results">
-    <h5>Results from <span class="resDate"></span>:</h5><hr>
+    <h5>
+      Results from <span class="resDate"></span>:
+    </h5><hr>
+    <div class="row">
+      <button class="exportbtn btn-small waves-effect waves-light">EXPORT TO CSV
+        <i class="material-icons right">send</i>
+      </button>
+    </div>
     <div class="row">
       <div class="chart" style="position:relative; width: 100%; height:80%;">
         <canvas></canvas>
@@ -188,7 +195,6 @@
           labels.length = 0;
           temp.length = 0;
           hum.length = 0;
-          console.log(r);
 
           $(".resDate").html(onedate);
 
@@ -203,6 +209,8 @@
             $("tbody").append("<tr><td>"+el.data+"</td><td>"+el.temp+"&#8451;</td><td>"+el.hum+"%</td></tr>");
             chart.update();
           });
+
+          exportCsv(r);
         }
         
       });
@@ -224,7 +232,6 @@
           labels.length = 0;
           temp.length = 0;
           hum.length = 0;
-          console.log(r);
 
           $(".resDate").html(start+" to "+end);
 
@@ -244,12 +251,32 @@
             $("#oneDate").val(oneDate);
             getOneDay(sensor, data);
           });
+
+          exportCsv(r);
+          
         }
         
       });
       
       $(".loading").hide();
       $(".results").show();
+    }
+
+    function exportCsv(r){
+      $(".exportbtn").off().on("click", () => {
+        let csvContent = "data:text/csv;charset=utf-8,";
+        r.forEach(function (el) {
+          let row = el.data + ";" + el.temp + ";" + el.hum;
+          csvContent += row + "\r\n";
+        });
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
     }
 
     

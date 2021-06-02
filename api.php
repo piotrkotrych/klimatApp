@@ -10,7 +10,7 @@ header('Content-Type: application/json');
 
 switch ($_GET['type']) {
     case 'getSensors':
-        $sql = mysqli_query($link, "select distinct(miejsce) as sensor from klimat");
+        $sql = mysqli_query($link, "select distinct(miejsce) as sensor from klimat order by sensor asc");
         $sensors = array();
         while ($r = mysqli_fetch_assoc($sql)) {
             

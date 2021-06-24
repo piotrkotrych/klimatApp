@@ -1,84 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="shortcut icon" href="gfx/favicon.png" type="image/png">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" href="style.css">
-  <title>Taki mamy KLIMAT!</title>
-</head>
-<body>
-  <div class="menu"></div>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link rel="shortcut icon" href="gfx/favicon.png" type="image/png" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Taki mamy KLIMAT!</title>
+  </head>
+  <body>
+    <div class="menu"></div>
 
-  <div class="container main">
-    <h5 class="sensorsqty"><span class="sensorqty">0</span> active sensors:</h5>
-    <hr>
-    <div class="sensorlist">
-      
-      
+    <div class="container main">
+      <h5 class="sensorsqty">
+        <span class="sensorqty">0</span> active sensors:
+      </h5>
+      <hr />
+      <div class="sensorlist"></div>
     </div>
-  </div>
 
-  <div class="container loading">
-    <div class="center-align">
-      <img src="gfx/loading.webp" alt="Loading..." style="width: 150px; margin-top: 50px;">
+    <div class="container loading">
+      <div class="center-align">
+        <img
+          src="gfx/loading.webp"
+          alt="Loading..."
+          style="width: 150px; margin-top: 50px"
+        />
+      </div>
     </div>
-  </div>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script src="js/app.js"></script>
-<script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      $(document).ready(function () {
+        $(".sidenav").sidenav({ edge: "right" });
 
-$(document).ready(function () {
-  $('.sidenav').sidenav({edge: 'right'});
+        let sensorqty = null;
+        let sensors = [];
 
-  let sensorqty = null;
-  let sensors = [];
+        $.ajax({
+          type: "get",
+          url: "api.php",
+          data: { type: "getSensors" },
+          success: function (r) {
+            sensors.push(r);
+            sensorqty = r.length;
+            $(".sensorqty").html(sensorqty);
+            $(".loading").hide();
 
-  
-  $.ajax({
-    type: "get",
-    url: "api.php",
-    data: {type: 'getSensors'},
-    success: function (r) {
-      sensors.push(r);
-      sensorqty = r.length;
-      $(".sensorqty").html(sensorqty);
-      $(".loading").hide();
-      
-      r.forEach(el => {
+            r.forEach((el) => {
+              let bat_icon = "battery_full";
+              let bat_color = "#004d40";
+              let bat_text = "class='more'";
 
-        let bat_icon = 'battery_full';
-        let bat_color = '#004d40';
+              if (parseInt(el.bat) <= 1) {
+                bat_icon = "battery_alert";
+                bat_color = "red";
+                bat_text = "class='more tooltipped' data-tooltip='Low battery'";
+              }
 
-        if(parseInt(el.bat) <= 10){
-          bat_icon = 'battery_alert';
-          bat_color = 'red';
-        }
-        
-        let alert_icon = 'notifications';
-        let alert_color = '#004d40';
-        let alert_text = 'No new alerts';
+              let alert_icon = "notifications";
+              let alert_color = "#004d40";
+              let alert_text = "No new alerts";
 
-        if(parseInt(el.hum) < 30){
-          alert_icon = 'notifications_active';
-          alert_color = 'red';
-          alert_text = 'Humidity level below 30%';
-        }
+              if (parseInt(el.hum) < 30) {
+                alert_icon = "notifications_active";
+                alert_color = "red";
+                alert_text = "Humidity level below 30%";
+              }
 
-        $(".sensorlist").append('<div class="sensor"><div class="card sensorcard"><div class="card-content"><div class="card-title">Sensor #'+el.sensor+' <span class="right"><a href="#" class="more tooltipped" data-position="bottom" data-tooltip="'+alert_text+'"><i class="material-icons small" style="color: '+alert_color+';">'+alert_icon+'</i></a><a href="#" class="more tooltipped" data-position="bottom" data-tooltip="'+el.bat+'% of battery left"><i class="material-icons small" style="color: '+bat_color+';">'+bat_icon+'</i></a></span></div> <hr> <div class="temp"> <h5>Temperature: <span>'+el.temp+'&#8451;</span> <a href="data.html?sensor='+el.sensor+'"><span class="more right"><i class="material-icons small">more_vert</i></span></a></h5> </div> <div class="hum"> <h5>Humidity: <span>'+el.hum+'%</span><a href="data.html?sensor='+el.sensor+'"><span class="more right"><i class="material-icons small">more_vert</i></span></a></h5> </div> <div class="hum"> <h5>Location: <span>'+el.loc+'</span></h5> </div> </div> <div class="lastupdate"> Last update: <span>'+el.data+'</span> </div> </div> </div>');
+              $(".sensorlist").append(
+                '<div class="sensor"><div class="card sensorcard"><div class="card-content"><div class="card-title">Sensor #' +
+                  el.sensor +
+                  ' <span class="right"><a href="#" class="more tooltipped" data-position="bottom" data-tooltip="' +
+                  alert_text +
+                  '"><i class="material-icons small" style="color: ' +
+                  alert_color +
+                  ';">' +
+                  alert_icon +
+                  '</i></a><a href="#" data-position="bottom" ' +
+                  bat_text +
+                  '><i class="material-icons small" style="color: ' +
+                  bat_color +
+                  ';">' +
+                  bat_icon +
+                  '</i></a></span></div> <hr> <div class="temp"> <h5>Temperature: <span>' +
+                  el.temp +
+                  '&#8451;</span> <a href="data.html?sensor=' +
+                  el.sensor +
+                  '"><span class="more right"><i class="material-icons small">more_vert</i></span></a></h5> </div> <div class="hum"> <h5>Humidity: <span>' +
+                  el.hum +
+                  '%</span><a href="data.html?sensor=' +
+                  el.sensor +
+                  '"><span class="more right"><i class="material-icons small">more_vert</i></span></a></h5> </div> <div class="hum"> <h5>Location: <span>' +
+                  el.loc +
+                  '</span></h5> </div> </div> <div class="lastupdate"> Last update: <span>' +
+                  el.data +
+                  "</span> </div> </div> </div>"
+              );
+            });
+            $(".tooltipped").tooltip();
+            $(".main").show(100);
+          },
+        });
       });
-      $('.tooltipped').tooltip();
-      $(".main").show(100);
-    }
-  });
-
-  
-  
-});
-
-</script>
-</body>
+    </script>
+  </body>
 </html>

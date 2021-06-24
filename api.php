@@ -10,14 +10,14 @@ header('Content-Type: application/json');
 
 switch ($_GET['type']) {
     case 'getSensors':
-        $sql = mysqli_query($link, "select distinct(miejsce) as sensor from klimat order by sensor asc");
+        $sql = mysqli_query($link, "select distinct(klimat.miejsce) as sensor from klimat left join klimat_sensor on klimat.miejsce = klimat_sensor.miejsce where klimat_sensor.active = 1 order by sensor asc");
         $sensors = array();
         while ($r = mysqli_fetch_assoc($sql)) {
             
 
             $sensor = $r['sensor'];
 
-            $sql1 = mysqli_query($link, "SELECT created, napiecie_baterii as bat, (SELECT procent FROM `klimat_bat` WHERE napiecie_baterii between vFrom and vTo) as procent, round(avg(temperatura),1) as temp, round(AVG(wilgotnosc),1) as hum, lokacja, lokx, loky FROM `klimat` left join klimat_sensor on klimat.miejsce = klimat_sensor.miejsce WHERE klimat.miejsce = '$sensor' GROUP by created, bat, lokacja, lokx, loky order by created desc limit 1");
+            $sql1 = mysqli_query($link, "SELECT created, napiecie_baterii as bat, (SELECT procent FROM `klimat_bat` WHERE napiecie_baterii between vFrom and vTo) as procent, round(avg(temperatura),1) as temp, round(AVG(wilgotnosc),1) as hum, lokacja, lokx, loky FROM `klimat` left join klimat_sensor on klimat.miejsce = klimat_sensor.miejsce WHERE klimat.miejsce = '$sensor' and klimat_sensor.active = 1 GROUP by created, bat, lokacja, lokx, loky order by created desc limit 1");
             if($res = mysqli_fetch_assoc($sql1)){
                 $r['data'] = $res['created'];
                 $r['temp'] = $res['temp'];

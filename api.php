@@ -1,6 +1,6 @@
 <?php
 
-$link = mysqli_connect('localhost', 'so718_klimat', 'eltwin123', 'so718_klimat');
+$link = mysqli_connect('xxx', 'xxx', 'xxx', 'xxx');
 if (mysqli_connect_errno()) {
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
     exit();
